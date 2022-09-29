@@ -10,5 +10,6 @@ echo "Coding School" | sudo tee /data/web_static/releases/test/index.html
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 # configure="/location \/ /{:a; N; /\}/!ba; a\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n"
 sudo chown -hR ubuntu:ubuntu /data/ 
-sudo sed -i '/location \/ /{:a; N; /\}/!ba; a\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' -e '}' /etc/nginx/sites-available/default
+sed -i -e '/location \/ /{:a; N; /\}/!ba; a\\n\tlocation /hbnb_static/ {\n\t\talias /dat
+a/web_static/current/;\n\t}\n' -e '}' ~/default
 sudo service nginx restart
