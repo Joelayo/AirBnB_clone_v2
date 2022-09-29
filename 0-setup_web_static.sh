@@ -2,10 +2,7 @@
 # script to setup web server for the deployment of web_static
 sudo apt-get -y update
 sudo apt-get -y upgrade
-if [ $(dpkg-query -W -f='${Status}' nginx 2>/dev/null | grep -c "ok installed") -eq 0 ];
-then
-	sudo apt-get -y install nginx;
-fi
+sudo apt-get -y install nginx;
 sudo mkdir -p /data/web_static/releases/test/
 sudo mkdir -p /data/web_static/shared/
 sudo chown -R ubuntu /data/web_static/releases/test
