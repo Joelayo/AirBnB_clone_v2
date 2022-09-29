@@ -7,8 +7,7 @@ then
 fi
 sudo mkdir -p /data/web_static/releases/test/ /data/web_static/shared/
 echo "Coding School" | sudo tee /data/web_static/releases/test/index.html
-sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 configure="\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n"
 sudo chown -hR ubuntu:ubuntu /data/ 
-sed -i -e '/location \/ /{:a; N; /\}/!ba; a\$confu=igure' -e '}' /etc/nginx/sites-available/default
+sudo sed -i "14i\ $configure" /etc/nginx/sites-available/default
 sudo service nginx restart
