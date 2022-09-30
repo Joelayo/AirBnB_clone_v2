@@ -1,37 +1,30 @@
 #!/usr/bin/python3
-"""script that deploy archive!"""
-from fabric.api import env, local, put, run
-from datetime import datetime
-env.hosts = ['3.236.80.232', '44.200.150.121']
-env.user = 'ubuntu'
+"""
+Fabric script based on the file 1-pack_web_static.py that distributes an
+archive to the web servers
+"""
 
-def do_pack():
-    """function that generates tgz archive"""
-    try:
-        date = datetime.now().strftime("%Y%m%d%H%M%S")
-        file_name = "versions/web_static_{}.tgz".format(date)
-        local("mkdir -p versions")
-        local('tar -cvzf {} web_static'.format(file_name))
-        return file_name
-    except Exception as e:
-        return None
+from fabric.api import put, run, env
+from os.path import exists
+env.hosts = ['142.44.167.228', '144.217.246.195']
+
 
 def do_deploy(archive_path):
-    """function that distributes an archive to your web servers"""
+    """distributes an archive to the web servers"""
+    if exists(archive_path) is False:
+        return False
     try:
-        filename = archive_path.split("/")[-1]
-        onlyname = filename.split(".")[0]
-        uncompress_path = "/data/web_static/releases/{}".format(onlyname)
+        file_n = archive_path.split("/")[-1]
+        no_ext = file_n.split(".")[0]
+        path = "/data/web_static/releases/"
         put(archive_path, '/tmp/')
-        run('sudo mkdir -p {}/'.format(uncompress_path))
-        run('sudo tar -xzf /tmp/{} -C {}'.format(filename, uncompress_path))
-        run('sudo rm /tmp/{}'.format(filename))
-        run('sudo mv {0}/web_static/* {0}/'.format(uncompress_path))
-        run('sudo rm -rf {}/web_static'.format(uncompress_path))
-        run('sudo rm -rf /data/web_static/current')
-        run('sudo ln -s {}/ /data/web_static/current'.format(uncompress_path))
-        print('New version deployed!')
+        run('mkdir -p {}{}/'.format(path, no_ext))
+        run('tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
+        run('rm /tmp/{}'.format(file_n))
+        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, no_ext))
+        run('rm -rf {}{}/web_static'.format(path, no_ext))
+        run('rm -rf /data/web_static/current')
+        run('ln -s {}{}/ /data/web_static/current'.format(path, no_ext))
         return True
-    except BaseException:
-        print('Do it again')
+    except:
         return False
