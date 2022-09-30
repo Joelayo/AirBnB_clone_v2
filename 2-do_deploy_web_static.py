@@ -61,5 +61,4 @@ def do_deploy(archive_path):
     if res.failed:
         return False
     print('New version deployed!')
-    return True
-    
+    return True 
